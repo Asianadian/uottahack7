@@ -21,3 +21,14 @@ class LLM:
     )
     ics_data = response.choices[0].message.content
     return ics_data
+  
+  def delete_event_prompt(self, prompt, events):
+    response = openai.chat.completions.create(
+      model="gpt-3.5-turbo",
+      messages=[
+        {"role": "system", "content": f"You are an assistant that returns calendar event IDs that match a description to be deleted. You only respond with the IDs in a list in JSON format. {datetime_information()}"},
+        {"role": "user", "content": f'The descriptions are as follows:{prompt} \nThe events are as follows: {events} \nReturn the event IDs for this request in following format: {{ "event_ids": [<event IDs>] }}'}
+      ]
+    )
+    event_ids_to_delete = response.choices[0].message.content
+    return event_ids_to_delete

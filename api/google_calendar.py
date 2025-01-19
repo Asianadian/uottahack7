@@ -104,3 +104,27 @@ class GoogleCalendar:
     
     except Exception as e:
       print(f"Exception occured while getting events: {e}")
+
+  def delete_event(self, event_id):
+    try:
+      self.service.events().delete(
+        calendarId=self.calendar_id,
+        eventId=event_id
+      ).execute()
+    
+    except Exception as e:
+      print(f"Exception occured while deleting event: {e}")
+
+  def delete_events(self, event_ids):
+    try:
+      deleted_events = []
+
+      event_ids = json.loads(event_ids)['event_ids']
+
+      for event_id in event_ids:
+        self.delete_event(event_id)
+
+      return deleted_events
+
+    except Exception as e:
+      print(f"Exception occured while deleting events: {e}")
